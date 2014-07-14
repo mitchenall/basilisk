@@ -297,6 +297,33 @@ export class ArrayVector<T> implements Sequence<T> {
         return undefined;
     }
 
+    public splice(index:number, howMany:number, ... vects:any[]): {spliced: ArrayVector<T>; removed: ArrayVector<T>} {
+        var result = [],
+            removed = [],
+            i;
+
+        if (howMany == 0 && vects.length == 0) {
+            return;
+        }
+
+        if (index < 0) {
+            index = this.length + index;
+        }
+        for (i = 0; i < index; i++) {
+            result[i] = this.get(i);
+        }
+        vects.forEach(function(vect) {
+            result.push(vect);
+        });
+        for (i = index; i < index + howMany; i++) {
+            removed.push(this.get(i));
+        }
+        for (i = index + (howMany || 0); i < this.length; i++) {
+            result.push(this.get(i));
+        }
+        return {spliced: ArrayVector.from(result), removed: ArrayVector.from(removed)};
+    }
+
     public equals(other:any):boolean {
         if (this === other) {
             return true;
@@ -616,6 +643,33 @@ export class Vector<T> implements Sequence<T> {
             }
         });
         return value;
+    }
+
+    public splice(index:number, howMany:number, ... vects:any[]): {spliced: Vector<T>; removed: Vector<T>} {
+        var result = [],
+            removed = [],
+            i;
+
+        if (howMany == 0 && vects.length == 0) {
+            return;
+        }
+
+        if (index < 0) {
+            index = this.length + index;
+        }
+        for (i = 0; i < index; i++) {
+            result[i] = this.get(i);
+        }
+        vects.forEach(function(vect) {
+            result.push(vect);
+        });
+        for (i = index; i < index + howMany; i++) {
+            removed.push(this.get(i));
+        }
+        for (i = index + (howMany || 0); i < this.length; i++) {
+            result.push(this.get(i));
+        }
+        return {spliced: Vector.fromArray(result), removed: Vector.fromArray(removed)};
     }
 
     // find an item by ===

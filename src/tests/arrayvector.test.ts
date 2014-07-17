@@ -146,6 +146,15 @@ describe("ArrayVector", function () {
     });
 
     describe('.splice', function() {
+
+        it("Should return the original vector if no items required to be added or removed", function() {
+            var small = V.from(['one', 'two', 'three', 'four']),
+                result = small.splice(1, 0);
+
+            expect(result.spliced).toEqual(small);
+            expect(result.removed.length).toEqual(0);
+        });
+
         it("Should remove items from the middle of a vector", function() {
             var small = V.from(['one', 'two', 'three', 'four']),
                 result = small.splice(1, 2);
